@@ -1,0 +1,27 @@
+# Agent 环路护栏与执行参数（全部可调，勿硬编码）
+
+llm:
+  base_url: http://localhost:11434/v1
+  model: fortran-translator        # Ollama Modelfile 中挂 LoRA adapter 后的模型名
+  temperature: 0.2
+  max_retries: 1                   # 结构化输出解析失败后的重试次数
+
+loop:
+  max_iterations: 5                # 最大修复轮次（硬上限）
+  oscillation_similarity: 0.95     # 相邻两轮代码 diff 相似度超过该值视为震荡，提前终止
+  error_history_window: 2          # repair prompt 中携带的最近错误轮数（防上下文膨胀）
+
+sandbox:
+  image: fortran-sandbox:latest
+  timeout_seconds: 30
+  memory_limit: 512m
+  cpus: 1
+  network: none                    # 断网执行
+
+verify:
+  rel_tolerance: 1.0e-6            # 数值等价相对误差容差
+  abs_tolerance: 1.0e-9
+
+eval:
+  dataset_path: examples/
+  output_dir: eval_results/
