@@ -1,0 +1,20 @@
+# A800 训练环境依赖
+# torch 需要单独使用 cu121 索引安装，例如：
+# pip install torch==2.1.2 --index-url https://download.pytorch.org/whl/cu121
+#
+# MVP 7B bf16 LoRA 基础依赖：
+transformers>=4.40,<5
+peft>=0.13,<1
+trl>=0.12,<1
+accelerate>=0.34,<2
+datasets>=2.20,<4
+safetensors>=0.4,<1
+sentencepiece>=0.2,<1
+huggingface_hub>=0.23,<1
+pyyaml>=6,<7
+
+# 仅 QLoRA 需要；安装后先验证 CUDA 12.1 兼容性：
+bitsandbytes>=0.43,<1
+
+# 仅双卡 FSDP/DeepSpeed 需要：
+deepspeed>=0.14,<1

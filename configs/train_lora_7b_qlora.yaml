@@ -1,0 +1,56 @@
+# 备选：14B/30B QLoRA 配置骨架
+# 仅在 7B bf16 LoRA 跑通后使用。
+# 目标硬件：A800 40GB 单卡或双卡
+# 依赖：bitsandbytes，且必须先验证 CUDA 12.1 / PyTorch 2.1 兼容性。
+
+model_name_or_path: Qwen/Qwen2.5-Coder-14B-Instruct
+trust_remote_code: true
+template: qwen
+
+stage: sft
+do_train: true
+finetuning_type: lora
+quantization_bit: 4
+quantization_type: nf4
+double_quantization: true
+lora_rank: 16
+lora_alpha: 32
+lora_dropout: 0.05
+lora_target: all
+
+dataset_dir: data
+dataset: fortran_cpp_train
+eval_dataset: fortran_cpp_val
+cutoff_len: 2048
+max_samples: 10000
+overwrite_cache: true
+
+output_dir: outputs/qwen2.5-coder-14b-qlora
+overwrite_output_dir: true
+logging_steps: 10
+save_steps: 200
+save_total_limit: 2
+plot_loss: true
+report_to: none
+
+per_device_train_batch_size: 1
+per_device_eval_batch_size: 1
+gradient_accumulation_steps: 32
+learning_rate: 1.0e-4
+num_train_epochs: 2.0
+lr_scheduler_type: cosine
+warmup_ratio: 0.03
+bf16: true
+fp16: false
+tf32: true
+gradient_checkpointing: true
+optim: paged_adamw_8bit
+
+do_eval: true
+eval_strategy: steps
+eval_steps: 200
+load_best_model_at_end: true
+metric_for_best_model: eval_loss
+greater_is_better: false
+
+ddp_timeout: 180000000

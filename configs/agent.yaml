@@ -2,9 +2,17 @@
 
 llm:
   base_url: http://localhost:11434/v1
-  model: fortran-translator        # Ollama Modelfile 中挂 LoRA adapter 后的模型名
+  # 本地开发默认使用当前 Ollama 模型；正式微调后替换为 fortran-translator:7b-q4
+  model: qwen3.5:2b
   temperature: 0.2
   max_retries: 1                   # 结构化输出解析失败后的重试次数
+
+agent:
+  source_lang: fortran
+  target_lang: cpp
+  cpp_standard: c++17
+  allow_third_party_libs: false    # MVP 只允许标准库
+  supported_dialects: [f77, f90, f95]
 
 loop:
   max_iterations: 5                # 最大修复轮次（硬上限）
@@ -19,9 +27,9 @@ sandbox:
   network: none                    # 断网执行
 
 verify:
-  rel_tolerance: 1.0e-6            # 数值等价相对误差容差
-  abs_tolerance: 1.0e-9
+  rel_tolerance: 1.0e-9            # 数值等价相对误差容差
+  abs_tolerance: 1.0e-12
 
 eval:
-  dataset_path: examples/
+  dataset_path: data/splits/
   output_dir: eval_results/
