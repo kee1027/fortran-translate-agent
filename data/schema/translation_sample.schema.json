@@ -1,0 +1,118 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/fortran-translate-agent/translation_sample.schema.json",
+  "title": "Fortran to C++ translation sample",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "source",
+    "license",
+    "fortran_dialect",
+    "features",
+    "input_fortran",
+    "output_cpp",
+    "notes",
+    "unsupported",
+    "compile_info",
+    "tests",
+    "validation",
+    "split"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9._:-]+$"
+    },
+    "source": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_url": {
+      "type": "string"
+    },
+    "license": {
+      "type": "string",
+      "minLength": 1
+    },
+    "fortran_dialect": {
+      "type": "string",
+      "enum": ["f77", "f90", "f95"]
+    },
+    "features": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1},
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "input_fortran": {
+      "type": "string",
+      "minLength": 1
+    },
+    "output_cpp": {
+      "type": "string",
+      "minLength": 1
+    },
+    "notes": {
+      "type": "string"
+    },
+    "unsupported": {
+      "type": "array",
+      "items": {"type": "string"},
+      "uniqueItems": true
+    },
+    "compile_info": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["fortran", "cpp"],
+      "properties": {
+        "fortran": {"type": "string", "minLength": 1},
+        "cpp": {"type": "string", "minLength": 1}
+      }
+    },
+    "tests": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "input", "expected", "comparison"],
+        "properties": {
+          "name": {"type": "string", "minLength": 1},
+          "input": {"type": "string"},
+          "expected": {"type": "string"},
+          "comparison": {
+            "type": "string",
+            "enum": ["text", "numeric", "numeric_or_text", "custom"]
+          },
+          "rel_tolerance": {"type": "number", "minimum": 0},
+          "abs_tolerance": {"type": "number", "minimum": 0}
+        }
+      }
+    },
+    "validation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["fortran_ok", "cpp_ok", "tests_ok", "reviewed"],
+      "properties": {
+        "fortran_ok": {"type": "boolean"},
+        "cpp_ok": {"type": "boolean"},
+        "tests_ok": {"type": "boolean"},
+        "reviewed": {"type": "boolean"}
+      }
+    },
+    "split": {
+      "type": "string",
+      "enum": ["train", "val", "test"]
+    },
+    "reviewed_by": {
+      "type": "string"
+    },
+    "tags": {
+      "type": "array",
+      "items": {"type": "string"},
+      "uniqueItems": true
+    }
+  }
+}

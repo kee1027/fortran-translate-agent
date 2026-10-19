@@ -1,0 +1,43 @@
+{
+  "id": "seed-001-sum-double",
+  "source": "synthetic-seed",
+  "source_url": "",
+  "license": "synthetic",
+  "fortran_dialect": "f90",
+  "features": [
+    "do-loop",
+    "real8",
+    "formatted-io",
+    "stdin"
+  ],
+  "input_fortran": "program sum_double\n  implicit none\n  integer :: n, i\n  real(8) :: x, total\n  read(*,*) n\n  total = 0.0d0\n  do i = 1, n\n    read(*,*) x\n    total = total + x\n  end do\n  write(*,'(F12.6)') total\nend program sum_double\n",
+  "output_cpp": "#include <iomanip>\n#include <iostream>\n\nint main() {\n    int n = 0;\n    if (!(std::cin >> n)) {\n        return 1;\n    }\n\n    double total = 0.0;\n    for (int i = 0; i < n; ++i) {\n        double x = 0.0;\n        if (!(std::cin >> x)) {\n            return 1;\n        }\n        total += x;\n    }\n\n    std::cout << std::fixed << std::setprecision(6) << std::setw(12) << total << '\\n';\n    return 0;\n}\n",
+  "notes": "Fortran 1-based loop converted to a C++ 0-based loop; REAL(8) mapped to double; F12.6 output reproduced with std::fixed, std::setprecision(6), and std::setw(12).",
+  "unsupported": [],
+  "compile_info": {
+    "fortran": "gfortran -std=f2008 -O0 -Wall -Wextra main.f90 -o main",
+    "cpp": "g++ -std=c++17 -O0 -Wall -Wextra main.cpp -o main"
+  },
+  "tests": [
+    {
+      "name": "five_values",
+      "input": "5\n1.5 2.25 3.125 4.0 -0.875\n",
+      "expected": "   10.000000\n",
+      "comparison": "numeric",
+      "rel_tolerance": 1e-09,
+      "abs_tolerance": 1e-12
+    }
+  ],
+  "validation": {
+    "fortran_ok": false,
+    "cpp_ok": false,
+    "tests_ok": false,
+    "reviewed": false
+  },
+  "split": "train",
+  "reviewed_by": "",
+  "tags": [
+    "seed",
+    "pending-a800-compile"
+  ]
+}
